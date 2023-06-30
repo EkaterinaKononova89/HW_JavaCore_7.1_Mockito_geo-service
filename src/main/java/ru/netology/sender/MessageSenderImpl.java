@@ -1,11 +1,14 @@
 package ru.netology.sender;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import ru.netology.entity.Country;
 import ru.netology.entity.Location;
 import ru.netology.geo.GeoService;
 import ru.netology.i18n.LocalizationService;
+
+import static ru.netology.entity.Country.USA;
 
 public class MessageSenderImpl implements MessageSender {
 
@@ -20,12 +23,12 @@ public class MessageSenderImpl implements MessageSender {
     }
 
     public String send(Map<String, String> headers) {
-        String ipAddress = String.valueOf(headers.get(IP_ADDRESS_HEADER));
-        if (ipAddress != null && !ipAddress.isEmpty()) {
-            Location location = geoService.byIp(ipAddress);
-            System.out.printf("Отправлено сообщение: %s", localizationService.locale(location.getCountry()));
+        String ipAddress = String.valueOf(headers.get(IP_ADDRESS_HEADER)); // в этой строке null превращается в "null"
+        if (ipAddress != null && !ipAddress.isEmpty()) { // поэтому данное условие всегда справедливо
+            Location location = geoService.byIp(ipAddress); // при пустом IP/мапе здесь возникает ошибка
+            System.out.printf("Отправлено сообщение: %s%n", localizationService.locale(location.getCountry()));
             return localizationService.locale(location.getCountry());
         }
-        return localizationService.locale(Country.USA);
+        return localizationService.locale(Country.USA); // при данном написании кода эта ситуация невозможна
     }
 }
