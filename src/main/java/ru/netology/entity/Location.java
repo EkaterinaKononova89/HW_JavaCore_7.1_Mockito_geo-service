@@ -53,4 +53,8 @@ public class Location {
                 Objects.equals(this.builing, o.builing);
 
     }
+    @Override
+    public int hashCode() {
+        return Objects.hash(city, country, street, builing);
+    }
 }
